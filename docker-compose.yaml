@@ -1,0 +1,28 @@
+services:
+  bot:
+    build: .
+    container_name: zaBotaTestTaskBot
+    env_file:
+      - ./src/.env
+    environment:
+      - TZ=Europe/Moscow
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    entrypoint: ["/app/entrypoint.sh"]
+    command: ["uv", "run", "python", "-u", "./src/app.py"]
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_testTaskBot
+    restart: always
+    env_file:
+      - ./src/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  rabbit_data:
+  postgres_data:
