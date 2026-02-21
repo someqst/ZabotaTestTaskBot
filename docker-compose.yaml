@@ -19,10 +19,9 @@ services:
     env_file:
       - ./src/.env
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  rabbit_data:
   postgres_data:
