@@ -9,6 +9,7 @@ BASE_PATH = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
+    ENV: str
     OPENAI_TOKEN: SecretStr
     BOT_TOKEN: SecretStr
 
@@ -32,9 +33,23 @@ class Settings(BaseSettings):
         )
 
 
+class DevSettigns(Settings):
+    DEBUG: bool = True
+
+
+class ProdSettings(Settings):
+    DEBUG: bool = False
+
+
 @lru_cache
 def get_settings():
-    return Settings()
+    base = Settings()
+    env = base.ENV.lower()
+
+    if env == 'dev':
+        return DevSettigns()
+    
+    return ProdSettings()
 
 
 settings = get_settings()

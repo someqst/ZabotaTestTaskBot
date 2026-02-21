@@ -5,6 +5,7 @@ from aiogram.types.error_event import ErrorEvent
 
 from handlers import handle_routers
 from loader import bot, dp
+from data.config import settings
 from utils.logs import setup_logging
 from utils.set_commands import set_bot_commands
 
@@ -29,9 +30,12 @@ async def error_handling(error: ErrorEvent):
 
 async def main():
     dp.include_routers(handle_routers())
-    setup_logging(debug_console=True)
+    setup_logging(debug_console=settings.DEBUG)
     await set_bot_commands()
-    await bot.send_message(539937958, "Старт")
+
+    if settings.DEBUG:
+        await bot.send_message(539937958, "Старт")
+    
     await dp.start_polling(bot)
 
 
